@@ -18,9 +18,9 @@ data = response.json()
 print("API Response:", json.dumps(data, indent=4))
 
 # Assuming there's only one row and the column name is 'Qs Done'
-# Update this part after inspecting the actual structure of the response
 try:
-    count = data['results'][0]['properties']['Qs Done']['number']
+    rollup_data = data['results'][0]['properties']['Qs Done']['rollup']
+    count = rollup_data['number'] if rollup_data['number'] is not None else 0
     # Debugging: Print the fetched count
     print("Fetched Count:", count)
 
@@ -30,6 +30,9 @@ try:
 except KeyError as e:
     print(f"KeyError: {e}")
     print("Check the structure of the 'Qs Done' property in the API response.")
+    count = 0
+    with open('progress.json', 'w') as f:
+        json.dump({"count": count}, f)
 
 # Commit and push changes
 os.system('git config --global user.email "your-email@example.com"')
