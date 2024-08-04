@@ -17,10 +17,9 @@ data = response.json()
 # Print the API response to inspect its structure
 print("API Response:", json.dumps(data, indent=4))
 
-# Assuming there's only one row and the column name is 'Qs Done'
+# Assuming there's only one row and the column name is 'Qs Done Number'
 try:
-    rollup_data = data['results'][0]['properties']['Qs Done']['rollup']
-    count = rollup_data['number'] if rollup_data['number'] is not None else 0
+    count = data['results'][0]['properties']['Qs Done Number']['number']
     # Debugging: Print the fetched count
     print("Fetched Count:", count)
 
@@ -29,14 +28,14 @@ try:
         json.dump({"count": count}, f)
 except KeyError as e:
     print(f"KeyError: {e}")
-    print("Check the structure of the 'Qs Done' property in the API response.")
+    print("Check the structure of the 'Qs Done Number' property in the API response.")
     count = 0
     with open('progress.json', 'w') as f:
         json.dump({"count": count}, f)
 
 # Commit and push changes
-os.system('git config --global user.email "your-email@example.com"')
-os.system('git config --global user.name "your-username"')
+os.system('git config --global user.email "sterlingmcj@gmail.com"')
+os.system('git config --global user.name "starfox1230"')
 os.system('git add progress.json')
 os.system('git commit -m "Update progress count"')
-os.system(f'git push https://{os.getenv("PERSONAL_ACCESS_TOKEN")}@github.com/your-username/your-repository.git')
+os.system(f'git push https://{os.getenv("PERSONAL_ACCESS_TOKEN")}@github.com/starfox1230/RadPrimer-Progress-Bar.git')
