@@ -17,13 +17,11 @@ data = response.json()
 # Print the API response to inspect its structure
 print("API Response:", json.dumps(data, indent=4))
 
-# Assuming there's only one row and the column name is 'Qs Done Number'
+# Fetching the value from 'Qs Done Number' formula property
 try:
-    count = data['results'][0]['properties']['Qs Done Number']['number']
-    # Debugging: Print the fetched count
+    count = data['results'][0]['properties']['Qs Done Number']['formula']['number']
     print("Fetched Count:", count)
 
-    # Update progress.json
     with open('progress.json', 'w') as f:
         json.dump({"count": count}, f)
 except KeyError as e:
@@ -33,7 +31,6 @@ except KeyError as e:
     with open('progress.json', 'w') as f:
         json.dump({"count": count}, f)
 
-# Commit and push changes
 os.system('git config --global user.email "sterlingmcj@gmail.com"')
 os.system('git config --global user.name "starfox1230"')
 os.system('git add progress.json')
