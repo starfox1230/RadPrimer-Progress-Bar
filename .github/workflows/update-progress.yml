@@ -24,6 +24,6 @@ jobs:
       - name: Update progress from Notion
         env:
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         run: |
           python update_progress.py
