@@ -17,18 +17,23 @@ headers = {
 response = requests.post(f"https://api.notion.com/v1/databases/{DATABASE_ID}/query", headers=headers)
 data = response.json()
 
-# Print the API response to inspect the structure of the 'Qs Done Number' property
+# Print the API response to inspect the structure
 print("API Response:", json.dumps(data, indent=4))
 
-# Fetching the value from 'Qs Done Number' formula property
+# Fetching the value from 'Qs Done Number' property
 try:
-    count = data['results'][0]['properties']['Qs Done Number']['formula']['number']
+    qs_done_number = data['results'][0]['properties']['Qs Done Number']['formula']['string']
+    if qs_done_number is not None:
+        count = int(qs_done_number)
+    else:
+        # If 'Qs Done Number' is null, we'll use 'Formula' as a fallback
+        count = data['results'][0]['properties']['Formula']['formula']['number']
+    
     print("Fetched Count:", count)
-
     with open('progress.json', 'w') as f:
-        json.dump({"count": count}, f)  # Ensure the count is stored as an integer
-except KeyError as e:
-    print(f"KeyError: {e}. Check the structure of the 'Qs Done Number' property in the API response.")
+        json.dump({"count": count}, f)
+except (KeyError, ValueError, TypeError) as e:
+    print(f"Error: {e}. Check the structure of the 'Qs Done Number' and 'Formula' properties in the API response.")
     count = 0
     with open('progress.json', 'w') as f:
         json.dump({"count": count}, f)
