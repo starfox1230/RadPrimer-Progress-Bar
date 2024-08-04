@@ -3,7 +3,7 @@ import json
 import os
 
 NOTION_API_KEY = os.getenv('NOTION_API_KEY')
-DATABASE_ID = 'your_database_id'
+DATABASE_ID = '41c0d262592f416d8484747d519cdf1e'
 
 headers = {
     "Authorization": f"Bearer {NOTION_API_KEY}",
