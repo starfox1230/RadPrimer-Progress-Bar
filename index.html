@@ -4,44 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Progress Tracker</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        progress {
-            width: 100%;
-            max-width: 600px;
-            height: 30px;
-        }
-    </style>
 </head>
 <body>
-    <h1>Progress: <span id="progress-count">0</span>/1000</h1>
-    <progress id="progress-bar" value="0" max="1000"></progress>
-
+    <h1>Progress Tracker</h1>
+    <div>
+        <progress id="progress-bar" value="0" max="1000"></progress>
+        <span id="progress-text">0/1000</span>
+    </div>
     <script>
-        async function fetchProgress() {
-            try {
-                const response = await fetch('progress.json');
-                const data = await response.json();
+        fetch('progress.json')
+            .then(response => response.json())
+            .then(data => {
+                const progressBar = document.getElementById('progress-bar');
+                const progressText = document.getElementById('progress-text');
                 const count = data.count;
-                document.getElementById('progress-count').innerText = count;
-                document.getElementById('progress-bar').value = count;
-            } catch (error) {
-                console.error('Error fetching progress:', error);
-            }
-        }
 
-        fetchProgress();
+                progressBar.value = count;
+                progressText.textContent = `${count}/1000`;
+            });
     </script>
 </body>
 </html>
