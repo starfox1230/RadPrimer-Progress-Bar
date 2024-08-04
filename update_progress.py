@@ -17,24 +17,16 @@ data = response.json()
 # Print the API response to inspect its structure
 print("API Response:", json.dumps(data, indent=4))
 
-# Fetching the value from 'Qs Done Number' formula property
+# Fetching the value from 'Qs Done' property
 try:
-    # Check if the property exists and fetch its value
-    count_property = data['results'][0]['properties']['Qs Done Number']
-    if count_property['formula']['type'] == 'number':
-        count = count_property['formula']['number']
-    elif count_property['formula']['type'] == 'string' and count_property['formula']['string']:
-        count = float(count_property['formula']['string'])  # Convert string to float if necessary
-    else:
-        count = 0  # Default value if the property does not contain a valid number
-    
+    count = data['results'][0]['properties']['Qs Done']['rollup']['number']
     print("Fetched Count:", count)
 
     with open('progress.json', 'w') as f:
         json.dump({"count": count}, f)  # Ensure the count is stored as an integer
 except KeyError as e:
     print(f"KeyError: {e}")
-    print("Check the structure of the 'Qs Done Number' property in the API response.")
+    print("Check the structure of the 'Qs Done' property in the API response.")
     count = 0
     with open('progress.json', 'w') as f:
         json.dump({"count": count}, f)
