@@ -20,23 +20,39 @@ data = response.json()
 # Print the API response to inspect the structure
 print("API Response:", json.dumps(data, indent=4))
 
-# Fetching the value from 'Qs Done Number' property
-try:
-    qs_done_number = data['results'][0]['properties']['Qs Done Number']['formula']['string']
-    if qs_done_number is not None:
-        count = int(qs_done_number)
-    else:
-        # If 'Qs Done Number' is null, we'll use 'Formula' as a fallback
-        count = data['results'][0]['properties']['Formula']['formula']['number']
-    
-    print("Fetched Count:", count)
-    with open('progress.json', 'w') as f:
-        json.dump({"count": count}, f)
-except (KeyError, ValueError, TypeError) as e:
-    print(f"Error: {e}. Check the structure of the 'Qs Done Number' and 'Formula' properties in the API response.")
+# Function to recursively search for a number value
+def find_number(obj):
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if k == "number" and isinstance(v, (int, float)):
+                return v
+            result = find_number(v)
+            if result is not None:
+                return result
+    elif isinstance(obj, list):
+        for item in obj:
+            result = find_number(item)
+            if result is not None:
+                return result
+    return None
+
+# Searching for the correct number in all properties
+properties = data['results'][0]['properties']
+count = None
+for prop_name, prop_value in properties.items():
+    found_number = find_number(prop_value)
+    if found_number is not None and found_number != 0:  # Assuming 0 is not the value we're looking for
+        count = found_number
+        print(f"Found count {count} in property: {prop_name}")
+        break
+
+if count is None:
+    print("Could not find a non-zero number value in any property.")
     count = 0
-    with open('progress.json', 'w') as f:
-        json.dump({"count": count}, f)
+
+print("Fetched Count:", count)
+with open('progress.json', 'w') as f:
+    json.dump({"count": count}, f)
 
 # Git commands to commit and push the changes
 os.system('git config --global user.email "sterlingmcj@gmail.com"')
