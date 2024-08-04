@@ -19,17 +19,17 @@ print("API Response:", json.dumps(data, indent=4))
 
 # Fetching the value from 'Qs Done Number' formula property
 try:
+    # Try fetching the value assuming it's a formula property
     count = data['results'][0]['properties']['Qs Done Number']['formula']['number']
     print("Fetched Count:", count)
-
-    with open('progress.json', 'w') as f:
-        json.dump({"count": count}, f)
 except KeyError as e:
     print(f"KeyError: {e}")
     print("Check the structure of the 'Qs Done Number' property in the API response.")
     count = 0
-    with open('progress.json', 'w') as f:
-        json.dump({"count": count}, f)
+
+# Write the count to progress.json
+with open('progress.json', 'w') as f:
+    json.dump({"count": count}, f)
 
 os.system('git config --global user.email "sterlingmcj@gmail.com"')
 os.system('git config --global user.name "starfox1230"')
